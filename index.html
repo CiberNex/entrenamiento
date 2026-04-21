@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entrenamiento SPA</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app" id="app">
+    <header class="app-header">
+      <h1>Gestor de Entrenamientos</h1>
+      <p class="subtitle">Simple, visual y sin distracciones</p>
+    </header>
+
+    <section id="home-screen" class="screen active">
+      <div class="routine-buttons">
+        <button class="btn btn-routine" data-routine="abs">Rutina Abs</button>
+        <button class="btn btn-routine" data-routine="futbol">Rutina Fútbol</button>
+      </div>
+    </section>
+
+    <section id="training-screen" class="screen" aria-live="polite">
+      <div class="status-chip" id="phase-label">Listo para empezar</div>
+
+      <div class="timer" id="timer-display">00:00</div>
+
+      <div class="progress-card">
+        <p><strong>Ejercicio actual:</strong> <span id="exercise-name">-</span></p>
+        <p><strong>Serie actual:</strong> <span id="series-progress">-</span></p>
+      </div>
+
+      <div class="exercise-list-wrapper">
+        <h2>Lista de ejercicios</h2>
+        <ol id="exercise-list" class="exercise-list"></ol>
+      </div>
+
+      <div class="actions">
+        <button id="ready-btn" class="btn btn-primary">Listo</button>
+        <button id="restart-btn" class="btn btn-secondary">Reiniciar rutina</button>
+        <button id="home-btn" class="btn btn-ghost">Volver al inicio</button>
+      </div>
+    </section>
+
+    <section id="completed-screen" class="screen">
+      <div class="completed-card">
+        <h2>✅ Rutina completada</h2>
+        <p>¡Gran trabajo! Puedes reiniciar o elegir otra rutina.</p>
+        <div class="actions">
+          <button id="completed-restart-btn" class="btn btn-primary">Reiniciar rutina</button>
+          <button id="completed-home-btn" class="btn btn-ghost">Volver al inicio</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
