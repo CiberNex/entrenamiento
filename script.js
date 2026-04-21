@@ -9,27 +9,27 @@ const ROUTINES = {
   abs: {
     name: 'Rutina Abs',
     exercises: [
-      { name: 'Dominadas Prono', series: 6 },
-      { name: 'Dominadas Supino', series: 4 },
-      { name: 'Flexiones de pecho', series: 6 },
-      { name: 'Crunch abdominal', series: 4 },
-      { name: 'Elevación de piernas', series: 4 },
-      { name: 'Plancha', series: 3 }
+      { name: 'Dominadas Prono', series: 6, restSec: 80 },
+      { name: 'Dominadas Supino', series: 4, restSec: 80 },
+      { name: 'Flexiones de pecho', series: 6, restSec: 80 },
+      { name: 'Crunch abdominal', series: 4, restSec: 80 },
+      { name: 'Elevación de piernas', series: 4, restSec: 80 },
+      { name: 'Plancha', series: 3, restSec: 80 }
     ]
   },
   futbol: {
     name: 'Rutina Fútbol',
     exercises: [
-      { name: 'Dominadas Prono', series: 6 },
-      { name: 'Dominadas Supino', series: 4 },
-      { name: 'Flexiones de pecho', series: 6 },
-      { name: 'Saltos explosivos', series: 3 },
-      { name: 'Saltos a un pie lateral', series: 6 },
-      { name: 'Saltos a un pie delante y atrás', series: 6 },
-      { name: 'Salto alternado a un pie', series: 6 },
-      { name: 'Sentadilla salto', series: 3 },
-      { name: 'Escalonada', series: 3 },
-      { name: 'Suelo / medio / sube', series: 3 }
+      { name: 'Dominadas Prono', series: 6, restSec: 80 },
+      { name: 'Dominadas Supino', series: 4, restSec: 80 },
+      { name: 'Flexiones de pecho', series: 6, restSec: 80 },
+      { name: 'Saltos explosivos', series: 3, restSec: 80 },
+      { name: 'Saltos a un pie lateral', series: 6, restSec: 80 },
+      { name: 'Saltos a un pie delante y atrás', series: 6, restSec: 80 },
+      { name: 'Salto alternado a un pie', series: 6, restSec: 80 },
+      { name: 'Sentadilla salto', series: 3, restSec: 80 },
+      { name: 'Escalonada', series: 3, restSec: 80 },
+      { name: 'Suelo / medio / sube', series: 3, restSec: 80 }
     ]
   }
 };
@@ -160,6 +160,7 @@ function startRestCountdown(onComplete) {
     }
   };
 
+  state.phase = phase;
   tick();
   state.timerId = setInterval(tick, 100);
 }
