@@ -151,43 +151,42 @@ function startRestCountdown(onComplete) {
     const remainingMs = Math.max(0, state.endTime - Date.now());
     const displaySeconds = Math.ceil(remainingMs / 1000);
     const formatted = formatMMSS(displaySeconds);
+
     timerDisplay.textContent = formatted;
     updatePhaseUI(`Descanso (${formatted})`, '#f59e0b');
 
     if (remainingMs <= 0) {
       clearActiveTimer();
-      onComplete();
+      onComplete && onComplete();
     }
   };
 
-  state.phase = phase;
   tick();
-  state.timerId = setInterval(tick, 100);
+  state.timerId = setInterval(tick, 1000);
 }
 
 function completeSeriesAndAdvance() {
   const exercise = getCurrentExercise();
   if (!exercise) return false;
 
+  // avanzar serie
   if (state.currentSeries < exercise.series) {
     state.currentSeries += 1;
     renderProgress();
     return true;
   }
 
-  // Ejercicio terminado: avanzar automáticamente al siguiente.
-  const routine = getCurrentRoutine();
-  if (state.exerciseIndex < routine.exercises.length - 1) {
-    state.exerciseIndex += 1;
-    state.currentSeries = 1;
-    renderProgress();
-    return true;
+  // pasar al siguiente ejercicio
+  state.currentExerciseIndex += 1;
+  state.currentSeries = 1;
+
+  // si no hay más ejercicios → rutina terminada
+  if (!getCurrentExercise()) {
+    return false;
   }
 
-  // Rutina completa.
-  state.phase = 'completed';
-  setScreen('completed');
-  return false;
+  renderProgress();
+  return true;
 }
 
 function handleSeriesCompleted() {
