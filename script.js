@@ -1,33 +1,35 @@
 /**
  * Gestor de entrenamientos SPA en JavaScript puro.
- * Maneja estados: inicio, preparación, entrenamiento, descanso y finalizado.
+ * Maneja estados: inicio, en ejercicio, descanso, listo para continuar y finalizado.
  */
+
+const REST_SECONDS = 80;
 
 const ROUTINES = {
   abs: {
     name: 'Rutina Abs',
     exercises: [
-      { name: 'Dominadas Prono', series: 6, workSec: 80, restSec: 120 },
-      { name: 'Dominadas Supino', series: 4, workSec: 80, restSec: 120 },
-      { name: 'Flexiones de pecho', series: 6, workSec: 80, restSec: 120 },
-      { name: 'Crunch abdominal', series: 4, workSec: 80, restSec: 120 },
-      { name: 'Elevación de piernas', series: 4, workSec: 80, restSec: 120 },
-      { name: 'Plancha', series: 3, workSec: 30, restSec: 0 }
+      { name: 'Dominadas Prono', series: 6, restSec: 80 },
+      { name: 'Dominadas Supino', series: 4, restSec: 80 },
+      { name: 'Flexiones de pecho', series: 6, restSec: 80 },
+      { name: 'Crunch abdominal', series: 4, restSec: 80 },
+      { name: 'Elevación de piernas', series: 4, restSec: 80 },
+      { name: 'Plancha', series: 3, restSec: 80 }
     ]
   },
   futbol: {
     name: 'Rutina Fútbol',
     exercises: [
-      { name: 'Dominadas Prono', series: 6, workSec: 80, restSec: 120 },
-      { name: 'Dominadas Supino', series: 4, workSec: 80, restSec: 120 },
-      { name: 'Flexiones de pecho', series: 6, workSec: 80, restSec: 120 },
-      { name: 'Saltos explosivos', series: 3, workSec: 80, restSec: 120 },
-      { name: 'Saltos a un pie lateral', series: 6, workSec: 80, restSec: 120 },
-      { name: 'Saltos a un pie delante y atrás', series: 6, workSec: 80, restSec: 120 },
-      { name: 'Salto alternado a un pie', series: 6, workSec: 80, restSec: 120 },
-      { name: 'Sentadilla salto', series: 3, workSec: 80, restSec: 120 },
-      { name: 'Escalonada', series: 3, workSec: 80, restSec: 120 },
-      { name: 'Suelo / medio / sube', series: 3, workSec: 80, restSec: 120 }
+      { name: 'Dominadas Prono', series: 6, restSec: 80 },
+      { name: 'Dominadas Supino', series: 4, restSec: 80 },
+      { name: 'Flexiones de pecho', series: 6, restSec: 80 },
+      { name: 'Saltos explosivos', series: 3, restSec: 80 },
+      { name: 'Saltos a un pie lateral', series: 6, restSec: 80 },
+      { name: 'Saltos a un pie delante y atrás', series: 6, restSec: 80 },
+      { name: 'Salto alternado a un pie', series: 6, restSec: 80 },
+      { name: 'Sentadilla salto', series: 3, restSec: 80 },
+      { name: 'Escalonada', series: 3, restSec: 80 },
+      { name: 'Suelo / medio / sube', series: 3, restSec: 80 }
     ]
   }
 };
@@ -96,6 +98,10 @@ function updatePhaseUI(text, color) {
   phaseLabel.style.color = color;
 }
 
+function setTimerVisibility(isVisible) {
+  timerDisplay.style.display = isVisible ? 'block' : 'none';
+}
+
 function renderExerciseList() {
   const routine = getCurrentRoutine();
   if (!routine) return;
@@ -118,16 +124,35 @@ function renderProgress() {
   renderExerciseList();
 }
 
-function startCountdown(seconds, phase, onComplete) {
-  clearActiveTimer();
+function setReadyState() {
+  state.phase = 'ready';
+  updatePhaseUI('Listo para continuar', '#a3aab8');
+  setTimerVisibility(false);
+  readyBtn.disabled = false;
+}
 
-  const durationMs = seconds * 1000;
+function setExerciseState() {
+  state.phase = 'exercise';
+  updatePhaseUI('En ejercicio', '#22c55e');
+  setTimerVisibility(false);
+  readyBtn.disabled = false;
+}
+
+function startRestCountdown(onComplete) {
+  clearActiveTimer();
+  state.phase = 'rest';
+  readyBtn.disabled = true;
+  setTimerVisibility(true);
+
+  const durationMs = REST_SECONDS * 1000;
   state.endTime = Date.now() + durationMs;
 
   const tick = () => {
     const remainingMs = Math.max(0, state.endTime - Date.now());
     const displaySeconds = Math.ceil(remainingMs / 1000);
-    timerDisplay.textContent = formatMMSS(displaySeconds);
+    const formatted = formatMMSS(displaySeconds);
+    timerDisplay.textContent = formatted;
+    updatePhaseUI(`Descanso (${formatted})`, '#f59e0b');
 
     if (remainingMs <= 0) {
       clearActiveTimer();
@@ -142,16 +167,12 @@ function startCountdown(seconds, phase, onComplete) {
 
 function completeSeriesAndAdvance() {
   const exercise = getCurrentExercise();
-  if (!exercise) return;
+  if (!exercise) return false;
 
   if (state.currentSeries < exercise.series) {
     state.currentSeries += 1;
-    state.phase = 'ready';
-    updatePhaseUI('Listo para la siguiente serie', '#a3aab8');
-    timerDisplay.textContent = formatMMSS(exercise.workSec);
-    readyBtn.disabled = false;
     renderProgress();
-    return;
+    return true;
   }
 
   // Ejercicio terminado: avanzar automáticamente al siguiente.
@@ -159,38 +180,22 @@ function completeSeriesAndAdvance() {
   if (state.exerciseIndex < routine.exercises.length - 1) {
     state.exerciseIndex += 1;
     state.currentSeries = 1;
-    state.phase = 'ready';
-    const nextExercise = getCurrentExercise();
-    updatePhaseUI('Nuevo ejercicio: presiona Listo', '#a3aab8');
-    timerDisplay.textContent = formatMMSS(nextExercise.workSec);
-    readyBtn.disabled = false;
     renderProgress();
-    return;
+    return true;
   }
 
   // Rutina completa.
   state.phase = 'completed';
   setScreen('completed');
+  return false;
 }
 
-function handleWorkStart() {
-  const exercise = getCurrentExercise();
-  if (!exercise) return;
+function handleSeriesCompleted() {
+  const hasMoreWork = completeSeriesAndAdvance();
+  if (!hasMoreWork) return;
 
-  readyBtn.disabled = true;
-  updatePhaseUI('Entrenamiento', '#22c55e');
-
-  startCountdown(exercise.workSec, 'work', () => {
-    // Si no hay descanso configurado, continuar de inmediato.
-    if (exercise.restSec <= 0) {
-      completeSeriesAndAdvance();
-      return;
-    }
-
-    updatePhaseUI('Descanso', '#f59e0b');
-    startCountdown(exercise.restSec, 'rest', () => {
-      completeSeriesAndAdvance();
-    });
+  startRestCountdown(() => {
+    setReadyState();
   });
 }
 
@@ -198,18 +203,9 @@ function resetRoutineProgress() {
   clearActiveTimer();
   state.exerciseIndex = 0;
   state.currentSeries = 1;
-  state.phase = 'ready';
 
-  const currentExercise = getCurrentExercise();
-  if (currentExercise) {
-    timerDisplay.textContent = formatMMSS(currentExercise.workSec);
-  } else {
-    timerDisplay.textContent = '00:00';
-  }
-
-  updatePhaseUI('Listo para empezar', '#a3aab8');
-  readyBtn.disabled = false;
   renderProgress();
+  setExerciseState();
 }
 
 function selectRoutine(routineKey) {
@@ -225,6 +221,7 @@ function goHome() {
   state.currentSeries = 1;
   state.phase = 'idle';
   timerDisplay.textContent = '00:00';
+  setTimerVisibility(false);
   setScreen('home');
 }
 
@@ -233,7 +230,7 @@ Array.from(document.querySelectorAll('.btn-routine')).forEach((button) => {
   button.addEventListener('click', () => selectRoutine(button.dataset.routine));
 });
 
-readyBtn.addEventListener('click', handleWorkStart);
+readyBtn.addEventListener('click', handleSeriesCompleted);
 restartBtn.addEventListener('click', resetRoutineProgress);
 homeBtn.addEventListener('click', goHome);
 completedRestartBtn.addEventListener('click', () => {
@@ -244,3 +241,4 @@ completedHomeBtn.addEventListener('click', goHome);
 
 // Estado inicial
 setScreen('home');
+setTimerVisibility(false);
