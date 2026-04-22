@@ -23,13 +23,13 @@ const ROUTINES = {
       { name: 'Dominadas Prono', series: 6, restSec: 80 },
       { name: 'Dominadas Supino', series: 4, restSec: 80 },
       { name: 'Flexiones de pecho', series: 6, restSec: 80 },
-      { name: 'Saltos explosivos', series: 3, restSec: 80 },
-      { name: 'Saltos a un pie lateral', series: 6, restSec: 80 },
-      { name: 'Saltos a un pie delante y atrás', series: 6, restSec: 80 },
-      { name: 'Salto alternado a un pie', series: 6, restSec: 80 },
-      { name: 'Sentadilla salto', series: 3, restSec: 80 },
-      { name: 'Escalonada', series: 3, restSec: 80 },
-      { name: 'Suelo / medio / sube', series: 3, restSec: 80 }
+      { name: 'Saltos explosivos', series: 3, restSec: 25 },
+      { name: 'Saltos a un pie lateral', series: 6, restSec: 25 },
+      { name: 'Saltos a un pie delante y atrás', series: 6, restSec: 25 },
+      { name: 'Salto alternado a un pie', series: 6, restSec: 25 },
+      { name: 'Sentadilla salto', series: 3, restSec: 25 },
+      { name: 'Escalonada', series: 3, restSec: 25 },
+      { name: 'Suelo / medio / sube', series: 3, restSec: 25 }
     ]
   }
 };
@@ -180,12 +180,20 @@ function completeSeriesAndAdvance() {
   state.currentExerciseIndex += 1;
   state.currentSeries = 1;
 
-  // si no hay más ejercicios → rutina terminada
-  if (!getCurrentExercise()) {
+  const nextExercise = getCurrentExercise();
+
+  // si no hay más → rutina terminada
+  if (!nextExercise) {
     return false;
   }
 
+  // CLAVE: actualizar estado y UI
+  updatePhaseUI(`Nuevo ejercicio: ${nextExercise.name}`, '#3aab8');
+  setTimerVisibility(false);
+  readyBtn.disabled = false;
+
   renderProgress();
+
   return true;
 }
 
