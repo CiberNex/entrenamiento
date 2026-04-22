@@ -4,12 +4,12 @@
  */
 
 const REST_SECONDS = 80;
-
+const beepSound = new Audio('beep.mp3');
 const ROUTINES = {
   abs: {
     name: 'Rutina Abs',
     exercises: [
-      { name: 'Dominadas Prono', series: 6, restSec: 80 },
+      { name: 'Dominadas Prono', series: 6, restSec: 10 },
       { name: 'Dominadas Supino', series: 4, restSec: 80 },
       { name: 'Flexiones de pecho', series: 6, restSec: 80 },
       { name: 'Crunch abdominal', series: 4, restSec: 80 },
@@ -144,7 +144,10 @@ function startRestCountdown(onComplete) {
   readyBtn.disabled = true;
   setTimerVisibility(true);
 
-  const durationMs = REST_SECONDS * 1000;
+  const exercise = getCurrentExercise();
+  const restSeconds = exercise?.restSec || REST_SECONDS;
+  const durationMs = restSeconds * 1000;
+
   state.endTime = Date.now() + durationMs;
 
   const tick = () => {
@@ -153,10 +156,12 @@ function startRestCountdown(onComplete) {
     const formatted = formatMMSS(displaySeconds);
 
     timerDisplay.textContent = formatted;
-    updatePhaseUI(`Descanso`, '#f59e0b');
+    updatePhaseUI('Descanso', '#f59e0b');
 
     if (remainingMs <= 0) {
       clearActiveTimer();
+      beepSound.currentTime = 0;
+      beepSound.play();
       onComplete && onComplete();
     }
   };
@@ -186,7 +191,7 @@ function completeSeriesAndAdvance() {
   if (!nextExercise) {
     return false;
   }
-
+  
   // CLAVE: actualizar estado y UI
   updatePhaseUI(`Nuevo ejercicio: ${nextExercise.name}`, '#3aab8');
   setTimerVisibility(false);
