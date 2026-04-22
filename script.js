@@ -177,7 +177,7 @@ function completeSeriesAndAdvance() {
   }
 
   // pasar al siguiente ejercicio
-  state.currentExerciseIndex += 1;
+  state.exerciseIndex += 1;
   state.currentSeries = 1;
 
   const nextExercise = getCurrentExercise();
