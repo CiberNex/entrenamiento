@@ -153,7 +153,7 @@ function startRestCountdown(onComplete) {
     const formatted = formatMMSS(displaySeconds);
 
     timerDisplay.textContent = formatted;
-    updatePhaseUI(`Descanso (${formatted})`, '#f59e0b');
+    updatePhaseUI(`Descanso`, '#f59e0b');
 
     if (remainingMs <= 0) {
       clearActiveTimer();
