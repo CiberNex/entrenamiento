@@ -9,12 +9,12 @@ const ROUTINES = {
   abs: {
     name: 'Rutina Abs',
     exercises: [
-      { name: 'Dominadas Prono', series: 6, restSec: 10 },
+      { name: 'Dominadas Prono', series: 6, restSec: 80 },
       { name: 'Dominadas Supino', series: 4, restSec: 80 },
       { name: 'Flexiones de pecho', series: 6, restSec: 80 },
       { name: 'Crunch abdominal', series: 4, restSec: 80 },
       { name: 'Elevación de piernas', series: 4, restSec: 80 },
-      { name: 'Plancha', series: 3, restSec: 80 }
+      { name: 'Plancha', series: 3, restSec: 30 }
     ]
   },
   futbol: {
