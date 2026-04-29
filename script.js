@@ -6,30 +6,38 @@
 const REST_SECONDS = 80;
 const beepSound = new Audio('beep.mp3');
 const ROUTINES = {
-  abs: {
-    name: 'Rutina Abs',
+  lunes: {
+    name: 'Lunes',
     exercises: [
       { name: 'Dominadas Prono', series: 6, restSec: 80 },
       { name: 'Dominadas Supino', series: 4, restSec: 80 },
-      { name: 'Flexiones de pecho', series: 6, restSec: 80 },
-      { name: 'Crunch abdominal', series: 4, restSec: 80 },
-      { name: 'Elevación de piernas', series: 4, restSec: 80 },
-      { name: 'Plancha', series: 3, restSec: 30 }
+      { name: 'Flexiones de pecho', series: 6, restSec: 80 }
     ]
   },
-  futbol: {
-    name: 'Rutina Fútbol',
+  miercoles: {
+    name: 'Miércoles',
     exercises: [
-      { name: 'Dominadas Prono', series: 6, restSec: 80 },
+      { name: 'Sentadillas 15-20', series: 4, restSec: 60 },
+      { name: 'Zancadas 12 por pierna', series: 4, restSec: 60 },
+      { name: 'Puente de glúteo 15', series: 6, restSec: 45 },
+      { name: 'Elevaciones de pierna 10', series: 6, restSec: 60 },
+      { name: 'Plancha', series: 3, restSec: 45 } 
+    ]
+  },
+  jueves: {
+    name: 'Jueves',
+    exercises: [
+      { name: 'Dominadas Prono', series: 4, restSec: 80 },
       { name: 'Dominadas Supino', series: 4, restSec: 80 },
-      { name: 'Flexiones de pecho', series: 6, restSec: 80 },
-      { name: 'Saltos explosivos', series: 3, restSec: 25 },
-      { name: 'Saltos a un pie lateral', series: 6, restSec: 25 },
-      { name: 'Saltos a un pie delante y atrás', series: 6, restSec: 25 },
-      { name: 'Salto alternado a un pie', series: 6, restSec: 25 },
-      { name: 'Sentadilla salto', series: 3, restSec: 25 },
-      { name: 'Escalonada', series: 3, restSec: 25 },
-      { name: 'Suelo / medio / sube', series: 3, restSec: 25 }
+      { name: 'Flexiones de pecho', series: 8, restSec: 80 }
+    ]
+  },
+  viernes: {
+    name: 'Viernes',
+    exercises: [
+      { name: 'Elevaciones de piernas', series: 4, restSec: 80 },
+      { name: 'Rodillas al pecho', series: 4, restSec: 80 },
+      { name: 'Plancha por lado', series: 6, restSec: 45 }
     ]
   }
 };
