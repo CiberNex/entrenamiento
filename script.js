@@ -17,6 +17,9 @@ const ROUTINES = {
   miercoles: {
     name: 'Miércoles',
     exercises: [
+      { name: 'Saltos en Squat 8', series: 3, restSec: 60 },
+      { name: 'Saltos laterales 6', series: 3, restSec: 60 },
+      { name: 'Saltos largos 5', series: 3, restSec: 60 },
       { name: 'Sentadillas 15-20', series: 4, restSec: 60 },
       { name: 'Zancadas 12 por pierna', series: 4, restSec: 60 },
       { name: 'Puente de glúteo 15', series: 6, restSec: 45 },
@@ -37,7 +40,10 @@ const ROUTINES = {
     exercises: [
       { name: 'Elevaciones de piernas', series: 4, restSec: 80 },
       { name: 'Rodillas al pecho', series: 4, restSec: 80 },
-      { name: 'Plancha por lado', series: 6, restSec: 45 }
+      { name: 'Plancha por lado', series: 6, restSec: 45 },
+      { name: 'Saltos suaves 5', series: 3, restSec: 60 },
+      { name: 'Rodillas rápidas 20', series: 2, restSec: 45 },
+
     ]
   }
 };
