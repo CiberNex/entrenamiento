@@ -30,7 +30,7 @@ const ROUTINES = {
   jueves: {
     name: 'Jueves',
     exercises: [
-      { name: 'Dominadas Prono', series: 6, restSec: 80 },
+      { name: 'Dominadas Prono', series: 4, restSec: 80 },
       { name: 'Dominadas Supino', series: 4, restSec: 80 },
       { name: 'Flexiones de pecho', series: 8, restSec: 80 }
     ]
